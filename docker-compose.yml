@@ -1,0 +1,64 @@
+services:
+  # ─────────────────────────── API (NestJS) ───────────────────────────
+  api:
+    image: g5-api
+    build: ./backend
+    container_name: g5_api
+    restart: always
+    env_file:
+      - .env
+    networks:
+      - mysql_shared
+      - traefik
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - "traefik.http.routers.g5_api.rule=Host(`api.${DOMAIN}`)"
+      - traefik.http.routers.g5_api.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}
+      - traefik.http.routers.g5_api.tls=true
+      - traefik.http.routers.g5_api.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencrypt}
+      - traefik.http.services.g5_api.loadbalancer.server.port=3000
+
+  # ─────────────────────── Frontend (React/Vite) ──────────────────────
+  web:
+    image: bl_g5-app
+    build:
+      context: ./frontend
+      args:
+        # VITE_API_URL e compilado no build (build-time). Aponta para a API publica.
+        VITE_API_URL: https://api.${DOMAIN}/api
+    container_name: bl_g5
+    restart: always
+    networks:
+      - traefik
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.g5_web.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.g5_web.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}
+      - traefik.http.routers.g5_web.tls=true
+      - traefik.http.routers.g5_web.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencrypt}
+      - traefik.http.services.g5_web.loadbalancer.server.port=80
+
+  # ─────────────── Migrator one-off (Prisma migrate deploy) ────────────
+  # Nao sobe com `up` (profile "tools"). Usa o stage de build do backend,
+  # que tem a CLI do Prisma + schema + migrations. Roda manualmente:
+  #   docker compose run --rm migrate
+  migrate:
+    image: g5-migrate
+    build:
+      context: ./backend
+      target: build
+    profiles:
+      - tools
+    env_file:
+      - .env
+    networks:
+      - mysql_shared
+    command: ["npx", "prisma", "migrate", "deploy"]
+
+networks:
+  mysql_shared:
+    external: true
+  traefik:
+    external: true

@@ -1,16 +1,30 @@
+import 'dotenv/config';
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import * as bcrypt from 'bcryptjs';
 import { PrismaClient } from '../generated/prisma/client';
 import { buildDatabaseUrl } from '../src/config/database-url';
+
+function requireSeedEnv(name: string, minLength = 1): string {
+  const value = process.env[name]?.trim();
+  if (!value || value.length < minLength) {
+    throw new Error(
+      `A variável ${name} é obrigatória para executar o seed${
+        minLength > 1 ? ` e deve ter ao menos ${minLength} caracteres` : ''
+      }.`,
+    );
+  }
+  return value;
+}
+
+const adminEmail = requireSeedEnv('SEED_ADMIN_EMAIL');
+const adminSenha = requireSeedEnv('SEED_ADMIN_PASSWORD', 12);
+const financeiroSenha = requireSeedEnv('SEED_FINANCEIRO_SENHA', 12);
 
 const prisma = new PrismaClient({
   adapter: new PrismaMariaDb(buildDatabaseUrl()),
 });
 
 async function main(): Promise<void> {
-  const adminEmail = process.env.SEED_ADMIN_EMAIL ?? 'admin@g5.local';
-  const adminSenha = process.env.SEED_ADMIN_PASSWORD ?? 'admin123';
-
   const senhaHash = await bcrypt.hash(adminSenha, 10);
   await prisma.usuario.upsert({
     where: { email: adminEmail },
@@ -41,7 +55,6 @@ async function main(): Promise<void> {
     });
   }
 
-  const financeiroSenha = process.env.SEED_FINANCEIRO_SENHA ?? 'financeiro123';
   const financeiroSenhaHash = await bcrypt.hash(financeiroSenha, 10);
   await prisma.configSistema.upsert({
     where: { id: 1 },
@@ -50,9 +63,7 @@ async function main(): Promise<void> {
   });
 
   // eslint-disable-next-line no-console
-  console.log(`Seed concluído. Admin: ${adminEmail} / senha: ${adminSenha}`);
-  // eslint-disable-next-line no-console
-  console.log(`Senha financeiro (desbloqueio): ${financeiroSenha}`);
+  console.log(`Seed concluído. Administrador configurado: ${adminEmail}.`);
 }
 
 main()

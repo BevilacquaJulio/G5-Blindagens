@@ -199,7 +199,7 @@ MYSQL_SSL_CA_PATH=/run/secrets/mysql-ca.pem
 JWT_ACCESS_SECRET=segredo-forte-e-exclusivo
 JWT_REFRESH_SECRET=outro-segredo-forte-e-exclusivo
 CORS_ORIGIN=https://g5.seudominio.com.br
-SEED_ADMIN_EMAIL=admin@g5.seudominio.com.br
+SEED_ADMIN_EMAIL=admin@atlas.com
 SEED_ADMIN_PASSWORD=senha-forte-do-administrador
 SEED_FINANCEIRO_SENHA=senha-forte-do-financeiro
 ```

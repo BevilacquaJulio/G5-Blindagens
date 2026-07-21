@@ -12,6 +12,7 @@ import {
   IconCart,
   IconClipboard,
   IconDashboard,
+  IconDollar,
   IconMenu,
   IconClose,
   IconSwap,
@@ -29,12 +30,14 @@ interface NavItem {
 
 const principalNav: NavItem[] = [
   { to: '/', label: 'Dashboard', Icon: IconDashboard },
+  
 ];
 
 const operacoesNav: NavItem[] = [
   { to: '/compras', label: 'Compras', Icon: IconCart },
   { to: '/projetos', label: 'Projetos', Icon: IconClipboard },
-  { to: '/cadastros/movimentacoes', label: 'Movimentações', Icon: IconSwap }
+  { to: '/cadastros/movimentacoes', label: 'Movimentações', Icon: IconSwap },
+  { to: '/financeiro', label: 'Financeiro', Icon: IconDollar }
 ];
 
 const cadastrosNav: NavItem[] = [

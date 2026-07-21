@@ -15,6 +15,12 @@ vi.mock('./useAuth', () => ({
   }),
 }));
 
+vi.mock('../../lib/demo-auth', () => ({
+  demoAdminEmail: 'admin@atlas.com',
+  demoAdminPassword: 'atlas_stock123',
+  isDemoLoginEnabled: true,
+}));
+
 function renderPage() {
   return render(
     <MemoryRouter>
@@ -40,17 +46,27 @@ describe('LoginPage', () => {
     expect(loginMock).not.toHaveBeenCalled();
   });
 
+  it('preenche credenciais demo ao clicar no botão', async () => {
+    const user = userEvent.setup();
+    renderPage();
+
+    await user.click(screen.getByRole('button', { name: 'Preencher acesso demo' }));
+
+    expect(screen.getByLabelText('E-mail')).toHaveValue('admin@atlas.com');
+    expect(screen.getByLabelText('Senha')).toHaveValue('atlas_stock123');
+  });
+
   it('chama login com credenciais válidas', async () => {
     const user = userEvent.setup();
     loginMock.mockResolvedValueOnce(undefined);
     renderPage();
 
-    await user.type(screen.getByLabelText('E-mail'), 'admin@g5.local');
+    await user.type(screen.getByLabelText('E-mail'), 'admin@atlas.com');
     await user.type(screen.getByLabelText('Senha'), 'admin123');
     await user.click(screen.getByRole('button', { name: 'Entrar' }));
 
     await waitFor(() =>
-      expect(loginMock).toHaveBeenCalledWith('admin@g5.local', 'admin123'),
+      expect(loginMock).toHaveBeenCalledWith('admin@atlas.com', 'admin123'),
     );
   });
 
@@ -59,7 +75,7 @@ describe('LoginPage', () => {
     loginMock.mockRejectedValueOnce(new Error('boom'));
     renderPage();
 
-    await user.type(screen.getByLabelText('E-mail'), 'admin@g5.local');
+    await user.type(screen.getByLabelText('E-mail'), 'admin@atlas.com');
     await user.type(screen.getByLabelText('Senha'), 'errada');
     await user.click(screen.getByRole('button', { name: 'Entrar' }));
 

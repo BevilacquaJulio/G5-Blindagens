@@ -27,7 +27,7 @@ Interface do ERP de blindagem de veículos. Migração do frontend PHP/vanilla p
    ```bash
    npm run dev            # http://localhost:5173
    ```
-4. **Login**: `admin@g5.local` / `admin123` (usuário do seed do backend).
+4. **Login**: use o e-mail admin configurado no seed (ex.: `admin@atlas.com`).
 
 ## Arquitetura
 

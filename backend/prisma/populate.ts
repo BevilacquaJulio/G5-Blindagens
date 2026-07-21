@@ -7,7 +7,7 @@
  *   npm run db:seed      # admin + categorias mínimas
  *   npm run db:populate  # dados demo completos
  *
- * Idempotente: registros demo usam sufixo @demo.g5.local / códigos DEMO-*.
+ * Idempotente: registros demo usam e-mails @atlas.com / códigos DEMO-*.
  * Para repopular do zero, defina POPULATE_RESET=1 (apaga apenas dados demo).
  */
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
@@ -21,6 +21,14 @@ import { buildDatabaseUrl } from '../src/config/database-url';
 const prisma = new PrismaClient({
   adapter: new PrismaMariaDb(buildDatabaseUrl()),
 });
+
+const DEMO_CLIENTE_EMAILS = [
+  'joao.demo@atlas.com',
+  'maria.demo@atlas.com',
+  'frota@atlas.com',
+] as const;
+
+const DEMO_FORNECEDOR_EMAILS = ['supply@atlas.com', 'vidros@atlas.com'] as const;
 
 const CHECKLIST_PADRAO = [
   'Desmontagem',
@@ -96,7 +104,7 @@ async function registrarMovimentacao(
 }
 
 async function ensureAdmin() {
-  const email = process.env.SEED_ADMIN_EMAIL ?? 'admin@g5.local';
+  const email = process.env.SEED_ADMIN_EMAIL ?? 'admin@atlas.com';
   const senha = process.env.SEED_ADMIN_PASSWORD ?? 'admin123';
   const senhaHash = await bcrypt.hash(senha, 10);
 
@@ -114,7 +122,7 @@ async function ensureAdmin() {
 
 async function resetDemoData() {
   const demoClientes = await prisma.cliente.findMany({
-    where: { email: { endsWith: '@demo.g5.local' } },
+    where: { email: { in: [...DEMO_CLIENTE_EMAILS] } },
     select: { id: true },
   });
   const demoClienteIds = demoClientes.map((c) => c.id);
@@ -156,10 +164,10 @@ async function resetDemoData() {
     where: { placa: { startsWith: 'DEM' } },
   });
   await prisma.cliente.deleteMany({
-    where: { email: { endsWith: '@demo.g5.local' } },
+    where: { email: { in: [...DEMO_CLIENTE_EMAILS] } },
   });
   await prisma.fornecedor.deleteMany({
-    where: { email: { endsWith: '@demo.g5.local' } },
+    where: { email: { in: [...DEMO_FORNECEDOR_EMAILS] } },
   });
   await prisma.produto.deleteMany({
     where: { codigo: { startsWith: 'DEMO-' } },
@@ -167,14 +175,14 @@ async function resetDemoData() {
 
   await prisma.usuario.deleteMany({
     where: {
-      email: { in: ['gerente@g5.local', 'operador@g5.local'] },
+      email: { in: ['gerente@atlas.com', 'operador@atlas.com'] },
     },
   });
 }
 
 async function isAlreadyPopulated() {
   const count = await prisma.cliente.count({
-    where: { email: { endsWith: '@demo.g5.local' } },
+    where: { email: 'joao.demo@atlas.com' },
   });
   return count > 0;
 }
@@ -196,22 +204,22 @@ async function main() {
   const senhaPadrao = await bcrypt.hash('demo123', 10);
 
   const gerente = await prisma.usuario.upsert({
-    where: { email: 'gerente@g5.local' },
+    where: { email: 'gerente@atlas.com' },
     update: {},
     create: {
       nome: 'Carla Gerente',
-      email: 'gerente@g5.local',
+      email: 'gerente@atlas.com',
       senha: senhaPadrao,
       cargo: 'GERENTE',
     },
   });
 
   const operador = await prisma.usuario.upsert({
-    where: { email: 'operador@g5.local' },
+    where: { email: 'operador@atlas.com' },
     update: {},
     create: {
       nome: 'Pedro Operador',
-      email: 'operador@g5.local',
+      email: 'operador@atlas.com',
       senha: senhaPadrao,
       cargo: 'OPERADOR',
     },
@@ -341,7 +349,7 @@ async function main() {
       nomeRazaoSocial: 'Blindagem Supply Ltda',
       cpfCnpj: '04252011000110',
       telefone: '11987654321',
-      email: 'supply@demo.g5.local',
+      email: 'supply@atlas.com',
     },
   });
 
@@ -350,7 +358,7 @@ async function main() {
       nomeRazaoSocial: 'Vidros Premium SA',
       cpfCnpj: '11444777000161',
       telefone: '11976543210',
-      email: 'vidros@demo.g5.local',
+      email: 'vidros@atlas.com',
     },
   });
 
@@ -360,7 +368,7 @@ async function main() {
       nomeCompleto: 'João Carlos Mendes',
       cpfCnpj: '52998224725',
       telefone: '11999887766',
-      email: 'joao.demo@g5.local',
+      email: 'joao.demo@atlas.com',
       cep: '04438000',
       rua: 'Rua David Eid',
       numero: '120',
@@ -376,7 +384,7 @@ async function main() {
       nomeCompleto: 'Maria Fernanda Lima',
       cpfCnpj: '39053344705',
       telefone: '11988776655',
-      email: 'maria.demo@g5.local',
+      email: 'maria.demo@atlas.com',
       cep: '01310100',
       rua: 'Av. Paulista',
       numero: '1000',
@@ -393,7 +401,7 @@ async function main() {
       nomeCompleto: 'Transporte Executivo Ltda',
       cpfCnpj: '11222333000181',
       telefone: '1133221100',
-      email: 'frota@demo.g5.local',
+      email: 'frota@atlas.com',
       cep: '04547006',
       rua: 'Av. Eng. Luís Carlos Berrini',
       numero: '500',
@@ -879,11 +887,11 @@ async function main() {
   // eslint-disable-next-line no-console
   console.log('── Usuários ──');
   // eslint-disable-next-line no-console
-  console.log(`  Admin:    ${process.env.SEED_ADMIN_EMAIL ?? 'admin@g5.local'} / ${process.env.SEED_ADMIN_PASSWORD ?? 'admin123'}`);
+  console.log(`  Admin:    ${process.env.SEED_ADMIN_EMAIL ?? 'admin@atlas.com'} / ${process.env.SEED_ADMIN_PASSWORD ?? 'admin123'}`);
   // eslint-disable-next-line no-console
-  console.log('  Gerente:  gerente@g5.local / demo123');
+  console.log('  Gerente:  gerente@atlas.com / demo123');
   // eslint-disable-next-line no-console
-  console.log('  Operador: operador@g5.local / demo123');
+  console.log('  Operador: operador@atlas.com / demo123');
   // eslint-disable-next-line no-console
   console.log(`  Financeiro (desbloqueio): ${process.env.SEED_FINANCEIRO_SENHA ?? 'financeiro123'}`);
   // eslint-disable-next-line no-console

@@ -58,7 +58,7 @@ formato padrão `{ error: { code, message } }` (filtro global de exceções).
    - Docs (Swagger): `http://localhost:3000/api/docs`
    - Health: `GET /api/health` e `GET /api/health/ready`
 
-> Login inicial (definido no seed): `admin@g5.local` / `admin123`
+> Login inicial (definido no seed): `admin@atlas.com`
 > (altere via `SEED_ADMIN_*` no `.env`).
 
 ## Migrations (fluxo Prisma-owned)

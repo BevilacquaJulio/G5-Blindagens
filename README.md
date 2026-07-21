@@ -195,6 +195,7 @@ MYSQL_PASSWORD=senha-forte
 MYSQL_DATABASE=g5
 MYSQL_SSL=true
 MYSQL_SSL_REJECT_UNAUTHORIZED=false
+MYSQL_SSL_CA_PATH=/run/secrets/mysql-ca.pem
 JWT_ACCESS_SECRET=segredo-forte-e-exclusivo
 JWT_REFRESH_SECRET=outro-segredo-forte-e-exclusivo
 CORS_ORIGIN=https://g5.seudominio.com.br
@@ -208,6 +209,14 @@ SEED_FINANCEIRO_SENHA=senha-forte-do-financeiro
 conexão TLS. O valor `MYSQL_SSL_REJECT_UNAUTHORIZED=false` mantém a conexão
 criptografada, mas aceita o certificado autoassinado usado na rede Docker
 privada; prefira `true` quando instalar um certificado confiável no MySQL.
+Antes do build, copie a CA pública do container MySQL para o caminho montado
+pelos serviços:
+
+```bash
+mkdir -p secrets
+docker cp mysql_shared:/var/lib/mysql/ca.pem secrets/mysql-ca.pem
+chmod 644 secrets/mysql-ca.pem
+```
 
 ### 2. Confirmar as redes externas
 

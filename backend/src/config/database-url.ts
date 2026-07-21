@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+
 /**
  * Constrói a URL de conexão MySQL a partir das variáveis de ambiente MYSQL_*.
  *
@@ -21,6 +23,14 @@ function rejectUnauthorizedCertificate(): boolean {
   );
 }
 
+function getDatabaseCaPath(): string {
+  const caPath = process.env.MYSQL_SSL_CA_PATH?.trim();
+  if (!caPath) {
+    throw new Error('MYSQL_SSL_CA_PATH é obrigatório quando MYSQL_SSL=true.');
+  }
+  return caPath;
+}
+
 export function buildDatabaseUrl(): string {
   const host = process.env.MYSQL_HOST ?? 'localhost';
   const port = process.env.MYSQL_PORT ?? '3306';
@@ -30,6 +40,7 @@ export function buildDatabaseUrl(): string {
 
   const params = new URLSearchParams({ charset: 'utf8mb4' });
   if (useDatabaseSsl()) {
+    params.set('sslcert', getDatabaseCaPath());
     params.set(
       'sslaccept',
       rejectUnauthorizedCertificate() ? 'strict' : 'accept_invalid_certs',
@@ -46,10 +57,13 @@ export function buildDatabaseConfig(): {
   password: string;
   database: string;
   charset: string;
-  ssl?: { rejectUnauthorized: boolean };
+  ssl?: { ca: Buffer; rejectUnauthorized: boolean };
 } {
   const ssl = useDatabaseSsl()
-    ? { rejectUnauthorized: rejectUnauthorizedCertificate() }
+    ? {
+        ca: readFileSync(getDatabaseCaPath()),
+        rejectUnauthorized: rejectUnauthorizedCertificate(),
+      }
     : undefined;
 
   return {

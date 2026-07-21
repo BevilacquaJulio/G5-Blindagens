@@ -16,14 +16,16 @@ describe('database config', () => {
     process.env.MYSQL_DATABASE = 'atlas_stock';
     process.env.MYSQL_SSL = 'true';
     process.env.MYSQL_SSL_REJECT_UNAUTHORIZED = 'false';
+    process.env.MYSQL_SSL_CA_PATH = '/run/secrets/mysql-ca.pem';
 
     expect(buildDatabaseUrl()).toBe(
-      'mysql://atlas:senha%40com%23caracteres@mysql_shared:3306/atlas_stock?charset=utf8mb4&sslaccept=accept_invalid_certs',
+      'mysql://atlas:senha%40com%23caracteres@mysql_shared:3306/atlas_stock?charset=utf8mb4&sslcert=%2Frun%2Fsecrets%2Fmysql-ca.pem&sslaccept=accept_invalid_certs',
     );
+    process.env.MYSQL_SSL_CA_PATH = __filename;
     expect(buildDatabaseConfig()).toMatchObject({
       host: 'mysql_shared',
       port: 3306,
-      ssl: { rejectUnauthorized: false },
+      ssl: { rejectUnauthorized: false, ca: expect.any(Buffer) },
     });
   });
 

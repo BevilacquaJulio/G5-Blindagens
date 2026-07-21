@@ -7,6 +7,8 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+    volumes:
+      - ./secrets/mysql-ca.pem:/run/secrets/mysql-ca.pem:ro
     networks:
       - mysql_shared
       - traefik
@@ -71,6 +73,8 @@ services:
       - tools
     env_file:
       - .env
+    volumes:
+      - ./secrets/mysql-ca.pem:/run/secrets/mysql-ca.pem:ro
     networks:
       - mysql_shared
     command: ["npx", "prisma", "migrate", "deploy"]

@@ -27,7 +27,7 @@ services:
     cpus: 0.75
 
   # ─────────────────────── Frontend (React/Vite) ──────────────────────
-  web:
+  app:
     image: bl_g5-app
     build:
       context: ./frontend

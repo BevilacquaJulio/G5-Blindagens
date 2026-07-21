@@ -193,6 +193,8 @@ MYSQL_PORT=3306
 MYSQL_USER=g5_user
 MYSQL_PASSWORD=senha-forte
 MYSQL_DATABASE=g5
+MYSQL_SSL=true
+MYSQL_SSL_REJECT_UNAUTHORIZED=false
 JWT_ACCESS_SECRET=segredo-forte-e-exclusivo
 JWT_REFRESH_SECRET=outro-segredo-forte-e-exclusivo
 CORS_ORIGIN=https://g5.seudominio.com.br
@@ -202,7 +204,10 @@ SEED_FINANCEIRO_SENHA=senha-forte-do-financeiro
 ```
 
 `MYSQL_HOST` deve ser o nome resolvível do container MySQL dentro da rede
-`mysql_shared`. Não use `localhost`.
+`mysql_shared`. Não use `localhost`. Com MySQL 8.4, `MYSQL_SSL=true` força uma
+conexão TLS. O valor `MYSQL_SSL_REJECT_UNAUTHORIZED=false` mantém a conexão
+criptografada, mas aceita o certificado autoassinado usado na rede Docker
+privada; prefira `true` quando instalar um certificado confiável no MySQL.
 
 ### 2. Confirmar as redes externas
 

@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import { PrismaClient } from '../../generated/prisma/client';
-import { buildDatabaseUrl } from '../config/database-url';
+import { buildDatabaseConfig } from '../config/database-url';
 
 /**
  * PrismaService — instancia o PrismaClient com o driver adapter mariadb
@@ -20,7 +20,7 @@ export class PrismaService
   private readonly logger = new Logger(PrismaService.name);
 
   constructor() {
-    super({ adapter: new PrismaMariaDb(buildDatabaseUrl()) });
+    super({ adapter: new PrismaMariaDb(buildDatabaseConfig()) });
   }
 
   async onModuleInit(): Promise<void> {

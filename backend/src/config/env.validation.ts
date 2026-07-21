@@ -16,6 +16,8 @@ export const envSchema = z.object({
   MYSQL_USER: z.string().min(1),
   MYSQL_PASSWORD: z.string().default(''),
   MYSQL_DATABASE: z.string().min(1),
+  MYSQL_SSL: z.enum(['true', 'false']).default('false'),
+  MYSQL_SSL_REJECT_UNAUTHORIZED: z.enum(['true', 'false']).default('true'),
 
   // JWT — segredos distintos para access e refresh
   JWT_ACCESS_SECRET: z.string().min(16),

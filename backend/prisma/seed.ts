@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import * as bcrypt from 'bcryptjs';
 import { PrismaClient } from '../generated/prisma/client';
-import { buildDatabaseUrl } from '../src/config/database-url';
+import { buildDatabaseConfig } from '../src/config/database-url';
 
 function requireSeedEnv(name: string, minLength = 1): string {
   const value = process.env[name]?.trim();
@@ -21,7 +21,7 @@ const adminSenha = requireSeedEnv('SEED_ADMIN_PASSWORD', 12);
 const financeiroSenha = requireSeedEnv('SEED_FINANCEIRO_SENHA', 12);
 
 const prisma = new PrismaClient({
-  adapter: new PrismaMariaDb(buildDatabaseUrl()),
+  adapter: new PrismaMariaDb(buildDatabaseConfig()),
 });
 
 async function main(): Promise<void> {

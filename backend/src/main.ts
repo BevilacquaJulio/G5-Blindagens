@@ -25,7 +25,7 @@ async function bootstrap(): Promise<void> {
   });
 
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('G5 Blindagens API')
+    .setTitle('Atlas Stock API')
     .setDescription('API do ERP de gestão de blindagem de veículos.')
     .setVersion('1.0')
     .addBearerAuth()

@@ -68,7 +68,7 @@ export default function DashboardPage() {
     <>
       <PageHeader
         title="Dashboard"
-        subtitle="Visão operacional do ERP G5 Blindagens."
+        subtitle="Visão operacional do ERP Atlas Stock."
       />
 
       <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

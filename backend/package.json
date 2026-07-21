@@ -1,7 +1,7 @@
 {
   "name": "g5-backend",
   "version": "1.0.0",
-  "description": "API NestJS para o ERP G5 Blindagens (migração do sistema PHP legado).",
+  "description": "API NestJS para o ERP Atlas Stock.",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {

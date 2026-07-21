@@ -1,4 +1,4 @@
-# G5 Blindagens — Frontend (React)
+# Atlas Stock — Frontend (React)
 
 Interface do ERP de blindagem de veículos. Migração do frontend PHP/vanilla para
 **React + Vite + TypeScript**, consumindo a API NestJS.

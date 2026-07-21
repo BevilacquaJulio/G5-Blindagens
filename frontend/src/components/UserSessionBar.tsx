@@ -26,7 +26,7 @@ interface UserSessionBarProps {
 }
 
 /**
- * Bloco de sessão do usuário — Obsidian G5.
+ * Bloco de sessão do usuário — header Atlas Stock.
  * Avatar com brilho, cargo em selo técnico e saída discreta integrada.
  */
 export function UserSessionBar({

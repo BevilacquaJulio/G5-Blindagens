@@ -16,7 +16,7 @@ interface FilterTabsProps<T extends string> {
 }
 
 /**
- * Abas de filtro horizontais — Obsidian G5.
+ * Abas de filtro horizontais — Atlas Stock.
  * Indicador deslizante com layoutId, igual à sidebar.
  */
 export function FilterTabs<T extends string>({

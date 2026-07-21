@@ -9,6 +9,7 @@ import { getApiErrorMessage } from '../../lib/api';
 import { TextField } from '../../components/form/TextField';
 import { Button } from '../../components/Button';
 import { Alert } from '../../components/feedback';
+import { BrandLogo } from '../../components/BrandLogo';
 
 const loginSchema = z.object({
   email: z.string().email('E-mail inválido.'),
@@ -63,17 +64,14 @@ export default function LoginPage() {
         className="relative w-full max-w-sm rounded-2xl border border-[#e5e5e5] bg-white p-8 shadow-[var(--shadow-lift)]"
       >
         <div className="mb-6 text-center">
-          <motion.span
+          <motion.div
             initial={{ scale: 0.6, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.1, duration: 0.4, ease: 'easeOut' }}
-            className="neon-black mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl font-mono text-lg font-black"
+            className="mx-auto mb-3 flex justify-center"
           >
-            G5
-          </motion.span>
-          <h1 className="text-2xl font-extrabold tracking-tight text-[#0a0a0a]">
-            G5 BLINDAGENS
-          </h1>
+            <BrandLogo className="h-14 w-auto max-w-[220px]" />
+          </motion.div>
           <p className="mt-1 text-sm uppercase tracking-[0.18em] text-[#0a0a0a]/45">
             Sistema de Gestão
           </p>

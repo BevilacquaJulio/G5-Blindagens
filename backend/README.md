@@ -1,4 +1,4 @@
-# G5 Blindagens — Backend (NestJS)
+# Atlas Stock — Backend (NestJS)
 
 API do ERP de gestão de blindagem de veículos. Migração do sistema PHP legado
 para uma arquitetura **NestJS + Prisma 7 + MySQL**, tipada e testada.

@@ -1,4 +1,4 @@
-# G5 Blindagens
+# Atlas Stock
 
 Sistema web para gestão operacional e financeira de empresas de blindagem
 automotiva. A aplicação centraliza cadastros, compras, estoque, projetos,

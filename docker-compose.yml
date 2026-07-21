@@ -1,7 +1,7 @@
 services:
   # ─────────────────────────── API (NestJS) ───────────────────────────
   api:
-    image: bl_g5-api
+    image: bl_atlas_stock-api
     build: ./backend
     container_name: bl_g5-api
     restart: unless-stopped
@@ -28,7 +28,7 @@ services:
 
   # ─────────────────────── Frontend (React/Vite) ──────────────────────
   app:
-    image: bl_g5-app
+    image: bl_atlas_stock-app
     build:
       context: ./frontend
       args:
@@ -62,7 +62,7 @@ services:
   # que tem a CLI do Prisma + schema + migrations. Roda manualmente:
   #   docker compose run --rm migrate
   migrate:
-    image: bl_g5-migrate
+    image: bl_atlas_stock-migrate
     container_name: bl_g5-migrate
     build:
       context: ./backend

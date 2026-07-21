@@ -1,5 +1,5 @@
 /**
- * Popula o ERP G5 com dados de demonstração (cadastros, estoque, compras,
+ * Popula o ERP Atlas Stock com dados de demonstração (cadastros, estoque, compras,
  * projetos e financeiro).
  *
  * Uso (após migrations + seed base):

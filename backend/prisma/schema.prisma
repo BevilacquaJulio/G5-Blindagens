@@ -1,4 +1,4 @@
-// Schema Prisma — ERP G5 Blindagens
+// Schema Prisma — ERP Atlas Stock
 // Prisma 7 + driver adapter mariadb. O datasource NÃO tem `url`: a conexão
 // vive em prisma.config.ts. O client é gerado em ./generated/prisma.
 //

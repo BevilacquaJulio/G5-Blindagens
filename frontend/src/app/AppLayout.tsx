@@ -3,6 +3,7 @@ import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useAuth } from '../features/auth/useAuth';
 import { Spinner } from '../components/feedback';
+import { BrandLogo } from '../components/BrandLogo';
 import { UserSessionBar } from '../components/UserSessionBar';
 import { NotificationBell } from '../components/NotificationBell';
 import {
@@ -67,13 +68,7 @@ export function AppLayout() {
           >
             <IconMenu />
           </button>
-          <span className="flex items-center gap-2.5 font-mono text-lg font-bold tracking-tight">
-            <span className="relative inline-flex h-2.5 w-2.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white/70 opacity-60" />
-              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-white shadow-[0_0_12px_rgba(255,255,255,0.9)]" />
-            </span>
-            G5 <span className="font-sans font-light text-white/60">BLINDAGENS</span>
-          </span>
+          <BrandLogo variant="on-dark" className="h-10 w-auto max-w-[240px] sm:h-15" />
         </div>
         <div className="flex items-center">
           <NotificationBell />
